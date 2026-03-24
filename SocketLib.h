@@ -156,6 +156,7 @@ public:
 
     bool AddServerCertificate(const char* szCAcertificate, const char* szHostCertificate, const char* szHostKey, const char* szDhParamFileName);
     bool AddCertificate(const char* const szHostCertificate, const char* const szHostKey);
+    bool AddCertificateFromMemory(const char* szHostCertificate, const char* szHostKey);
     bool SetCipher(const char* const szCipher) noexcept;
     bool SetAcceptState();
     bool SetConnectState();
