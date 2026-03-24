@@ -91,6 +91,11 @@ bool SslTcpSocketImpl::AddCertificate(const char* const szHostCertificate, const
     return (m_pClientCtx.SetCertificates(szHostCertificate, szHostKey) < 0) ? false : true;
 }
 
+bool SslTcpSocketImpl::AddCertificateFromMemory(const char* const szHostCertificate, const char* const szHostKey)
+{
+    return (m_pClientCtx.SetCertificatesFromMemory(szHostCertificate, szHostKey) < 0) ? false : true;
+}
+
 bool SslTcpSocketImpl::SetCipher(const char* const szCipher) noexcept
 {
     return m_pServerCtx.back().SetCipher(szCipher);
