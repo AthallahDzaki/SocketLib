@@ -78,7 +78,7 @@ namespace OpenSSLWrapper
         SslContext& operator=(const SslContext&) = delete;
 
         int SetCertificates(const char* szHostCertificate, const char* szHostKey);
-        int AddCertificateFromMemory(const char* szCertContent, const char* szKeyContent);
+        int SetCertificatesFromMemory(const char* szCertContent, const char* szKeyContent);
         string& GetCertCommonName() noexcept;
 
 #ifdef _DEBUG
