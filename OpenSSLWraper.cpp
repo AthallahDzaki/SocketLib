@@ -226,6 +226,42 @@ namespace OpenSSLWrapper
         return -5;
     }
 
+   int SslContext::AddCertificateFromMemory(const char* szCertContent, const char* szKeyContent)
+   {
+       if (szCertContent == nullptr || szKeyContent == nullptr)
+           return 0;
+   
+       // 1. Muat Sertifikat dari Memori
+       unique_ptr<BIO, decltype(&BIO_free)> certBio(BIO_new_mem_buf(szCertContent, -1), BIO_free);
+       X509* cert = PEM_read_bio_X509(certBio.get(), nullptr, nullptr, nullptr);
+       if (!cert || SSL_CTX_use_certificate(m_ctx, cert) != 1)
+           return -2; // Error loading certificate
+   
+       // 2. Muat Private Key dari Memori
+       unique_ptr<BIO, decltype(&BIO_free)> keyBio(BIO_new_mem_buf(szKeyContent, -1), BIO_free);
+       EVP_PKEY* pkey = PEM_read_bio_PrivateKey(keyBio.get(), nullptr, nullptr, nullptr);
+       if (!pkey || SSL_CTX_use_PrivateKey(m_ctx, pkey) != 1)
+       {
+           X509_free(cert);
+           return -3; // Error loading key
+       }
+   
+       // 3. Validasi Kecocokan
+       if (SSL_CTX_check_private_key(m_ctx) != 1)
+       {
+           X509_free(cert);
+           EVP_PKEY_free(pkey);
+           return -4; // Key doesn't match cert
+       }
+   
+       // Ambil info sertifikat untuk SNI/validasi
+       GetCertInformation(cert, m_strCertComName, m_vstrAltNames);
+   
+       X509_free(cert);
+       EVP_PKEY_free(pkey);
+       return 1; // Success
+   }
+
     string& SslContext::GetCertCommonName() noexcept
     {
         return m_strCertComName;
