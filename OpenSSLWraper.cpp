@@ -226,7 +226,7 @@ namespace OpenSSLWrapper
         return -5;
     }
 
-   int SslContext::AddCertificateFromMemory(const char* szCertContent, const char* szKeyContent)
+   int SslContext::SetCertificatesFromMemory(const char* szCertContent, const char* szKeyContent)
    {
        if (szCertContent == nullptr || szKeyContent == nullptr)
            return 0;
