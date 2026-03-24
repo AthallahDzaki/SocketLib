@@ -311,6 +311,10 @@ bool SslTcpSocket::AddCertificate(const char* const szHostCertificate, const cha
     return dynamic_cast<SslTcpSocketImpl*>(GetImpl())->AddCertificate(szHostCertificate, szHostKey);
 }
 
+bool SslTcpSocket::AddCertificateFromMemory(const char* szHostCertificate, const char* szHostKey) {
+    return static_cast<SslTcpSocketImpl*>(Impl_.get())->AddCertificateFromMemory(szHostCertificate, szHostKey);
+}
+
 bool SslTcpSocket::SetCipher(const char* const szCipher) noexcept
 {
     return dynamic_cast<SslTcpSocketImpl*>(GetImpl())->SetCipher(szCipher);
